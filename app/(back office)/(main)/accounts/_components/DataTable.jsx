@@ -19,6 +19,14 @@ import AccountForm from "@/components/common/AccountForm";
 
 const DataTable = ({ userId }) => {
   const [accounts, setAccounts] = useState([]);
+  const fetchAccounts = async () => {
+    const accountList = await getAllAccounts({
+      query: "",
+      page: 1,
+      limit: 6,
+    });
+    accountList && setAccounts(accountList.data);
+  };
   const columns = [
     {
       accessorKey: "account_name",
@@ -56,6 +64,7 @@ const DataTable = ({ userId }) => {
               accountId={id}
               userId={userId}
               account={row.original}
+              fetchAccounts={fetchAccounts}
             />
           </span>
         );
@@ -68,16 +77,7 @@ const DataTable = ({ userId }) => {
     getCoreRowModel: getCoreRowModel(),
   });
   useEffect(() => {
-    const getAccounts = async () => {
-      const accountList = await getAllAccounts({
-        query: "",
-        page: 1,
-        limit: 6,
-      });
-      accountList && setAccounts(accountList.data);
-    };
-
-    getAccounts();
+    fetchAccounts();
   }, []);
   return (
     <div className="rounded-md border m-5">

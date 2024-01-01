@@ -26,7 +26,7 @@ import {
 import { FaPencil, FaPlus } from "react-icons/fa6";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
-const AccountForm = ({ userId, type, account, accountId }) => {
+const AccountForm = ({ userId, type, account, accountId, fetchAccounts }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const initialValues =
@@ -79,6 +79,7 @@ const AccountForm = ({ userId, type, account, accountId }) => {
         if (updatedAccount) {
           form.reset();
           setOpen(false);
+          fetchAccounts();
           router.push(`/accounts`);
         }
       } catch (error) {

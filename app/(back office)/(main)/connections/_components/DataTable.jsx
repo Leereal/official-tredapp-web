@@ -22,6 +22,15 @@ import StartBotForm from "@/components/common/StartBotForm";
 
 const DataTable = ({ userId }) => {
   const [connections, setConnections] = useState([]);
+  const fetchConnections = async () => {
+    const connectionsList = await getAllConnections({
+      query: "",
+      category: "",
+      page: 1,
+      limit: 6,
+    });
+    connectionsList && setConnections(connectionsList.data);
+  };
   const columns = [
     {
       accessorKey: "account.account_name",
@@ -112,7 +121,6 @@ const DataTable = ({ userId }) => {
       header: "Actions",
       cell: ({ row }) => {
         const id = row.getValue("_id");
-        console.log("Original : ", row.original);
         return (
           <>
             <span className="mr-2">
@@ -121,14 +129,7 @@ const DataTable = ({ userId }) => {
                 connectionId={id}
                 userId={userId}
                 connection={row.original}
-              />
-            </span>
-            <span>
-              <StartBotForm
-                type="Update"
-                connectionId={id}
-                userId={userId}
-                connection={row.original}
+                fetchConnections={fetchConnections}
               />
             </span>
           </>
@@ -142,17 +143,7 @@ const DataTable = ({ userId }) => {
     getCoreRowModel: getCoreRowModel(),
   });
   useEffect(() => {
-    const getConnections = async () => {
-      const connectionsList = await getAllConnections({
-        query: "",
-        category: "",
-        page: 1,
-        limit: 6,
-      });
-      connectionsList && setConnections(connectionsList.data);
-    };
-
-    getConnections();
+    fetchConnections();
   }, []);
   return (
     <div className="rounded-md border m-5">

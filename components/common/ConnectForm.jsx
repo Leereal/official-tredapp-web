@@ -35,7 +35,13 @@ import { Spinner } from "./Spinner";
 import AccountDropdown from "./AccountDropdown";
 import RobotDropdown from "./RobotDropdown";
 import RiskTypeDropdown from "./RiskTypeDropdown";
-const ConnectForm = ({ userId, type, connection, connectionId }) => {
+const ConnectForm = ({
+  userId,
+  type,
+  connection,
+  connectionId,
+  fetchConnections,
+}) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const initialValues =
@@ -92,6 +98,7 @@ const ConnectForm = ({ userId, type, connection, connectionId }) => {
         if (updatedConnection) {
           form.reset();
           setOpen(false);
+          fetchConnections();
           router.push(`/connections`);
         }
       } catch (error) {
