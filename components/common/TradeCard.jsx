@@ -52,6 +52,13 @@ const TradeCard = ({ currency }) => {
 
           //Redirect to the other tab
           break;
+        case "trade_fail":
+          setIsLoading(false);
+          toast.error(
+            "Trade failed. Please make sure it's not running if so try again or contact support"
+          );
+          //Redirect to the other tab
+          break;
         default:
       }
     });

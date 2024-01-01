@@ -3,6 +3,7 @@ import { getConnectionsByUser } from "@/lib/actions/connection.actions";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import RobotCard from "./RobotCard";
+import { Skeleton } from "../ui/skeleton";
 
 const skeleton = () => {
   return (
@@ -17,19 +18,15 @@ const skeleton = () => {
 const ConnectionGroup = ({ userId }) => {
   const [robotConnections, setRobotConnections] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const fetchConnections = () => {
+  const fetchConnections = async () => {
     try {
       setIsLoading(true);
-      const getConnections = async () => {
-        const connectionsList = await getConnectionsByUser({
-          userId,
-          page: 1,
-          limit: 6,
-        });
-        connectionsList && setRobotConnections(connectionsList.data);
-      };
-
-      getConnections();
+      const connectionsList = await getConnectionsByUser({
+        userId,
+        page: 1,
+        limit: 6,
+      });
+      connectionsList && setRobotConnections(connectionsList.data);
     } catch (error) {
       console.log("ConnectionGroup error: ", error);
     } finally {

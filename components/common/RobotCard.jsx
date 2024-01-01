@@ -52,7 +52,6 @@ const RobotCard = ({ connection, fetchConnections }) => {
           }
           break;
         case "closed_trade":
-          console.log("Trade close3d : ", data);
           if (robotConnection._id === data._id) {
             setProfit(null);
             fetchConnections();
