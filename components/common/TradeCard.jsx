@@ -7,6 +7,7 @@ import { socket } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const TradeCard = ({ currency }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,15 +48,28 @@ const TradeCard = ({ currency }) => {
       switch (action) {
         case "trade_success":
           setIsLoading(false);
+          toast.success("Trade opened successfully");
+
           //Redirect to the other tab
           break;
         default:
       }
     });
+    socket.on("pending_order_success", (data) => {
+      if (data._id === currency) {
+        toast.success("Pending Order set successfully");
+        setIsLoading(false);
+        setOption("");
+        setPrice(0);
+      }
+    });
+    socket.on("no_bot_running", () => {
+      router.push("/robots");
+    });
 
     // Clean up the event listeners when the component unmounts
     return () => {
-      socket.off(["bot"]);
+      socket.off(["bot", "pending_order_success"]);
     };
   }, [socket]);
 

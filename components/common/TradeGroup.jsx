@@ -23,27 +23,29 @@ const TradeGroup = () => {
   const [symbols, setSymbols] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const fetchSymbols = async () => {
+    // We get the robot then extract the symbols in those robots
+    const robotList = await getAllRobots({
+      query: "",
+      category: "Semi-Auto",
+      page: 1,
+      limit: 100,
+    });
+    robotList && setSymbols(robotList.data[0].symbols);
+  };
+
   useEffect(() => {
     if (!deriv) {
       setIsLoading(true);
       try {
-        const getSymbols = async () => {
-          const robotList = await getAllRobots({
-            query: "",
-            category: "Semi-Auto",
-            page: 1,
-            limit: 100,
-          });
-          robotList && setSymbols(robotList.data[0].symbols);
-        };
-        getSymbols();
+        fetchSymbols();
       } catch (error) {
         console.log("Error: ", error);
       } finally {
         setIsLoading(false);
       }
     }
-  }, [deriv, symbols]);
+  }, [deriv]);
 
   return (
     <div className="space-y-3">
@@ -68,7 +70,11 @@ const TradeGroup = () => {
             symbols
               .filter((symbol) => symbol.active === true)
               ?.map((symbol) => (
-                <TradeCard currency={symbol.name} key={symbol.name} />
+                <TradeCard
+                  currency={symbol.name}
+                  fetchSymbols={fetchSymbols}
+                  key={symbol.name}
+                />
               ))
           ) : (
             <div className="font-bold text-red-600">
