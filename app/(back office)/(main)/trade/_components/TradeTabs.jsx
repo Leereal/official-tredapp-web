@@ -1,5 +1,6 @@
 "use client";
 import ConnectionGroup from "@/components/common/ConnectionGroup";
+import PendingOrderList from "@/components/common/PendingOrderList";
 import TradeGroup from "@/components/common/TradeGroup";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const TradeTabs = ({ userId }) => {
         </TabsContent>
         <TabsContent value="trading" className="space-y-4">
           <ConnectionGroup userId={userId} />
+          <PendingOrderList userId={userId} />
         </TabsContent>
       </Tabs>
     </div>

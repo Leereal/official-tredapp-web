@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ConnectionGroup from "@/components/common/ConnectionGroup";
 import { auth } from "@clerk/nextjs";
+import PendingOrderList from "@/components/common/PendingOrderList";
 
 const Dashboard = async () => {
   const { sessionClaims } = auth();
@@ -142,6 +143,7 @@ const Dashboard = async () => {
               </CardContent>
             </Card>
           </div>
+          <PendingOrderList userId={userId} />
         </TabsContent>
       </Tabs>
     </div>
