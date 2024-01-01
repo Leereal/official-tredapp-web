@@ -26,7 +26,7 @@ const DataTable = ({ userId }) => {
     isPending: false,
     id: "",
   });
-  const handleBot = (id, active) => {
+  const handleBot = (id, active, robot) => {
     setBotState({
       id,
       isPending: true,
@@ -37,9 +37,14 @@ const DataTable = ({ userId }) => {
         activate: false,
       });
     } else {
+      let auto = false;
+      if (robot.category.name !== "Semi-Auto") {
+        auto = true;
+      }
       socket.emit("handleBot", {
         id,
         activate: true,
+        auto,
       });
     }
   };
@@ -108,7 +113,7 @@ const DataTable = ({ userId }) => {
               <Button
                 size="xs"
                 className={active ? `bg-red-500` : ``}
-                onClick={() => handleBot(id, active)}
+                onClick={() => handleBot(id, active, row.original)}
                 disabled={botState.isPending && botState.id === id}
               >
                 {active ? <FaCircleStop /> : <FaCirclePlay />}
