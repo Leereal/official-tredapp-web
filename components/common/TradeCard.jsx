@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 const TradeCard = ({ currency }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [option, setOption] = useState("");
+  const [option, setOption] = useState("digital");
   const [error, setError] = useState("");
   const [price, setPrice] = useState(0);
   const router = useRouter();
@@ -114,9 +114,9 @@ const TradeCard = ({ currency }) => {
           <Input
             value={price}
             onChange={(e) => {
-              const inputValue = e.target.value.replace(/,/g, ".");
-              setPrice(inputValue && parseFloat(inputValue));
+              setPrice(e.target.value.replace(/,/g, "."));
             }}
+            type="number"
           />
           {(!price || price === 0) && (
             <div className=" flex justify-between">

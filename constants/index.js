@@ -21,6 +21,7 @@ export const accountDefaultValues = {
   active: true,
   balance: 0,
   opening_balance: 0,
+  account_type: "PRACTICE",
 };
 
 export const connectionDefaultValues = {

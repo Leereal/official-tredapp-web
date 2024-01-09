@@ -1,4 +1,5 @@
 import { Logo } from "@/components/Logo";
+import { cn } from "@/lib/utils";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import {
@@ -7,7 +8,10 @@ import {
   FaBuildingColumns,
   FaDownLeftAndUpRightToCenter,
   FaBaseballBatBall,
+  FaCircleQuestion,
+  FaGear,
 } from "react-icons/fa6";
+import { IoLogOut } from "react-icons/io5";
 
 export const Sidebar = () => {
   const navigation = [
@@ -42,120 +46,72 @@ export const Sidebar = () => {
     {
       href: "/dashboard",
       name: "Help",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-          />
-        </svg>
-      ),
+      icon: <FaCircleQuestion className="h-4 w-4" />,
     },
     {
       href: "/dashboard",
       name: "Settings",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
-      ),
+      icon: <FaGear className="h-4 w-4" />,
     },
     {
       href: "/dashboard",
       name: "Logout",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-          />
-        </svg>
-      ),
+      icon: <IoLogOut className="h-5 w-5" />,
     },
   ];
 
   return (
-    <nav className="hidden sm:flex h-screen border-r  flex-col justify-between ">
-      <div className="">
-        <div className="h-20 flex items-center px-8 border-b-2">
-          <Logo />
+    <aside className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
+      <div className="h-full px-3 py-4 overflow-y-auto dark:bg-gray-800 flex flex-col justify-between">
+        <div className="">
+          <div className="mb-3">
+            <Logo />
+          </div>
+          <div className="items-center">
+            <ul className="font-medium space-y-2">
+              {navigation.map((item, idx) => (
+                <li key={idx}>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex items-center p-3 text-gray-500 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      // active
+                      //   ? "bg-primary text-white dark:bg-white hover:text-primary"
+                      //   : ""
+                    )}
+                  >
+                    <span>{item.icon}</span>
+                    <span className="ms-3">{item.name}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div className="items-center">
-          <ul className="text-sm font-medium flex-1 mt-3">
-            {navigation.map((item, idx) => (
-              <li
-                key={idx}
-                className=" px-8 py-1 hover:bg-gray-50 active:bg-gray-100 duration-150"
-              >
+          <ul className="pb-4 text-sm font-medium">
+            {navsFooter.map((item, idx) => (
+              <li key={idx}>
                 <Link
                   href={item.href}
-                  className="flex items-center gap-x-2 text-gray-600 p-2 rounded-lg "
+                  className="flex items-center gap-x-2 text-gray-600 p-2 rounded-lg  hover:bg-gray-50 active:bg-gray-100 duration-150"
                 >
-                  <div>{item.icon}</div>
-                  <span className="text-gray-500 font-semibold text-[1rem]">
-                    {item.name}
-                  </span>
+                  <div className="text-gray-500">{item.icon}</div>
+                  {item.name}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
-      </div>
-      <div className="items-center px-8">
-        <ul className="px-4 pb-4 text-sm font-medium">
-          {navsFooter.map((item, idx) => (
-            <li key={idx}>
-              <Link
-                href={item.href}
-                className="flex items-center gap-x-2 text-gray-600 p-2 rounded-lg  hover:bg-gray-50 active:bg-gray-100 duration-150"
-              >
-                <div className="text-gray-500">{item.icon}</div>
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="py-4 px-4 border-t">
-          <div className="flex items-center justify-center gap-x-4">
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+          <div className="py-4 px-4 border-t">
+            <div className="flex items-center justify-center gap-x-4">
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
+            </div>
           </div>
         </div>
       </div>
-    </nav>
+    </aside>
   );
 };
 

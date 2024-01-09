@@ -41,6 +41,10 @@ const DataTable = ({ userId }) => {
       header: "Token",
     },
     {
+      accessorKey: "account_type",
+      header: "Account Type",
+    },
+    {
       accessorKey: "opening_balance",
       header: "Opening Balance",
     },

@@ -26,6 +26,8 @@ import {
 import { FaPencil, FaPlus } from "react-icons/fa6";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
+import AccountTypeDropdown from "./AccountTypeDropdown";
+
 const AccountForm = ({ userId, type, account, accountId, fetchAccounts }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -223,6 +225,24 @@ const AccountForm = ({ userId, type, account, accountId, fetchAccounts }) => {
                           className="mr-2 h-5 w-5 border-2 border-primary-500"
                         />
                       </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col gap-5 md:flex-row items-center">
+              <FormField
+                control={form.control}
+                name="account_type"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Account Type</FormLabel>
+                    <FormControl>
+                      <AccountTypeDropdown
+                        onChangeHandler={field.onChange}
+                        value={field.value}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
