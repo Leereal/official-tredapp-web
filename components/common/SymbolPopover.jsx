@@ -25,7 +25,6 @@ const SymbolPopover = ({ onChangeHandler, symbols }) => {
     <div className="bg-grey-50 h-[54px] focus-visible:ring-offset-0 placeholder:text-grey-500 p-regular-16 px-4 py-3 focus-visible:ring-transparent border-2 border-dotted rounded-full text-center hover:bg-gray-100 cursor-pointer">
       <Popover>
         <PopoverTrigger>Symbols</PopoverTrigger>
-        {console.log("Active Symbols : ", activeSymbols)}
         <PopoverContent className="p-2 w-fit ">
           {symbols && symbols.length ? (
             <ToggleGroup

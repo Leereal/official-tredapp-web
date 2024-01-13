@@ -34,9 +34,12 @@ import { FaPencil, FaPlus, FaRobot } from "react-icons/fa6";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import SymbolPopover from "./SymbolPopover";
-const RobotForm = ({ userId, type, robot, robotId, fetchRobots }) => {
+import { useRobotStore } from "@/store/Robots";
+import SocketDropdown from "./SocketDropdown";
+const RobotForm = ({ userId, type, robot, robotId }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { getRobots } = useRobotStore();
   const initialValues =
     robot && type === "Update"
       ? {
@@ -62,7 +65,7 @@ const RobotForm = ({ userId, type, robot, robotId, fetchRobots }) => {
         });
 
         if (newRobot) {
-          fetchRobots();
+          getRobots();
           form.reset();
           setOpen(false);
           router.push(`/robots`);
@@ -88,7 +91,7 @@ const RobotForm = ({ userId, type, robot, robotId, fetchRobots }) => {
         });
 
         if (updatedRobot) {
-          fetchRobots();
+          getRobots();
           form.reset();
           setOpen(false);
           router.push(`/robots`);
@@ -226,6 +229,22 @@ const RobotForm = ({ userId, type, robot, robotId, fetchRobots }) => {
                         placeholder="Strategy"
                         {...field}
                         className="input-field"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="socket"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Socket</FormLabel>
+                    <FormControl>
+                      <SocketDropdown
+                        onChangeHandler={field.onChange}
+                        value={field.value}
                       />
                     </FormControl>
                     <FormMessage />

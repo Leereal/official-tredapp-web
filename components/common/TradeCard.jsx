@@ -7,78 +7,46 @@ import { socket } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useTradeStore } from "@/store/Trade";
+import { flask_socket } from "@/lib/flask_socket";
+import { node_socket } from "@/lib/node_socket";
 
 const TradeCard = ({ currency }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isSending, trade_error, trade, setTradeError } = useTradeStore();
   const [option, setOption] = useState("digital");
-  const [error, setError] = useState("");
   const [price, setPrice] = useState(0);
+
   const router = useRouter();
   const enterTrade = (symbol, action) => {
     if (option) {
       if (price) {
-        socket.emit("signal", {
-          symbol,
-          action,
-          option,
-          price,
-        });
-        setIsLoading(true);
-        setError("");
+        trade({ symbol, action, option, price });
+        setTradeError("");
       } else {
-        socket.emit("signal", {
-          symbol,
-          action,
-          option,
-        });
-        setIsLoading(true);
-        setError("");
+        trade({ symbol, action, option });
+        setTradeError("");
       }
     } else {
-      setError("Option is required");
+      setTradeError("Option not selected");
     }
   };
-  const set_option = (e) => {
-    setOption(e);
-  };
-  useEffect(() => {
-    // Listen for the "connect" event, which is emitted when the connection is established
-    socket.on("bot", ({ action, data }) => {
-      switch (action) {
-        case "trade_success":
-          setIsLoading(false);
-          toast.success("Trade opened successfully");
 
-          //Redirect to the other tab
-          break;
-        case "trade_fail":
-          setIsLoading(false);
-          toast.error(
-            "Trade failed. Please make sure it's not running if so try again or contact support"
-          );
-          //Redirect to the other tab
-          break;
-        default:
-      }
-    });
-    socket.on("pending_order_success", (data) => {
-      if (data._id === currency) {
-        toast.success("Pending Order set successfully");
-        setIsLoading(false);
-        setOption("");
-        setPrice(0);
-      }
-    });
-    socket.on("no_bot_running", () => {
+  const set_option = (e) => setOption(e);
+
+  useEffect(() => {
+    flask_socket.on("no_bot_running", () => {
       router.push("/robots");
     });
 
+    node_socket.on("no_bot_running", () => {
+      router.push("/robots");
+    });
     // Clean up the event listeners when the component unmounts
     return () => {
-      socket.off(["bot", "pending_order_success"]);
+      flask_socket.off(["no_bot_running"]);
+      node_socket.off(["no_bot_running"]);
     };
-  }, [socket]);
+  }, [flask_socket, node_socket]);
 
   return (
     <Card>
@@ -121,13 +89,13 @@ const TradeCard = ({ currency }) => {
           {(!price || price === 0) && (
             <div className=" flex justify-between">
               <Button
-                disabled={isLoading}
+                disabled={isSending}
                 onClick={() => enterTrade(currency, "call")}
               >
                 BUY
               </Button>
               <Button
-                disabled={isLoading}
+                disabled={isSending}
                 onClick={() => enterTrade(currency, "put")}
                 className="bg-red-600"
               >
@@ -139,14 +107,14 @@ const TradeCard = ({ currency }) => {
             <>
               <div className=" flex justify-between">
                 <Button
-                  disabled={isLoading}
+                  disabled={isSending}
                   onClick={() => enterTrade(currency, "buy_limit")}
                   size="xs"
                 >
                   BUY LIMIT
                 </Button>
                 <Button
-                  disabled={isLoading}
+                  disabled={isSending}
                   onClick={() => enterTrade(currency, "buy_stop")}
                   size="xs"
                 >
@@ -155,7 +123,7 @@ const TradeCard = ({ currency }) => {
               </div>
               <div className=" flex justify-between">
                 <Button
-                  disabled={isLoading}
+                  disabled={isSending}
                   onClick={() => enterTrade(currency, "sell_limit")}
                   className="bg-red-600"
                   size="xs"
@@ -163,7 +131,7 @@ const TradeCard = ({ currency }) => {
                   SELL LIMIT
                 </Button>
                 <Button
-                  disabled={isLoading}
+                  disabled={isSending}
                   onClick={() => enterTrade(currency, "sell_stop")}
                   className="bg-red-600"
                   size="xs"
@@ -174,7 +142,7 @@ const TradeCard = ({ currency }) => {
             </>
           )}
           <div className="text-red-500 text-[10px] text-center p-0">
-            {error}
+            {trade_error}
           </div>
         </div>
       </CardContent>

@@ -13,64 +13,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllRobots } from "@/lib/actions/robot.actions";
 import { useEffect, useState } from "react";
 import RobotForm from "@/components/common/RobotForm";
 import { Button } from "@/components/ui/button";
 import { FaCirclePlay, FaCircleStop } from "react-icons/fa6";
 import { socket } from "@/lib/utils";
+import { useBotStore, useRobotStore } from "@/store/Robots";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const DataTable = ({ userId }) => {
-  const [robots, setRobots] = useState([]);
-  const [botState, setBotState] = useState({
-    isPending: false,
-    id: "",
-  });
-  const handleBot = (id, active, robot) => {
-    setBotState({
-      id,
-      isPending: true,
-    });
-    if (active) {
-      socket.emit("handleBot", {
-        id,
-        activate: false,
-      });
-    } else {
-      let auto = false;
-      if (robot.category.name !== "Semi-Auto") {
-        auto = true;
-      }
-      socket.emit("handleBot", {
-        id,
-        activate: true,
-        auto,
-      });
-    }
+  const { robots, isLoading, error, getRobots } = useRobotStore();
+  const { id: botId, isPending, activation } = useBotStore();
+  const handleBot = (id, robot) => {
+    activation(id, true, robot);
   };
-  const fetchRobots = async () => {
-    const robotList = await getAllRobots({
-      query: "",
-      category: "",
-      page: 1,
-      limit: 6,
-    });
-    robotList && setRobots(robotList.data);
-  };
-  const handleBotEvent = ({ action, data }) => {
-    switch (action) {
-      case "bot_started":
-        setBotState({
-          id: "",
-          isPending: false,
-        });
-        // Fetch the robots again after a bot starts
-        fetchRobots();
-        break;
-      default:
-        break;
-    }
-  };
+
   const columns = [
     {
       accessorKey: "name",
@@ -83,10 +44,18 @@ const DataTable = ({ userId }) => {
     {
       accessorKey: "description",
       header: "Description",
+      cell: ({ row }) => {
+        const description = row.getValue("description");
+        return <div className="max-w-64 truncate">{description}</div>;
+      },
     },
     {
       accessorKey: "strategy",
       header: "Strategy",
+    },
+    {
+      accessorKey: "socket",
+      header: "Socket",
     },
     {
       accessorKey: "active",
@@ -106,15 +75,15 @@ const DataTable = ({ userId }) => {
                 robotId={id}
                 userId={userId}
                 robot={row.original}
-                fetchRobots={fetchRobots}
+                fetchRobots={getRobots}
               />
             </span>
             <span>
               <Button
                 size="xs"
                 className={active ? `bg-red-500` : ``}
-                onClick={() => handleBot(id, active, row.original)}
-                disabled={botState.isPending && botState.id === id}
+                onClick={() => handleBot(id, row.original)}
+                disabled={isPending && botId === id}
               >
                 {active ? <FaCircleStop /> : <FaCirclePlay />}
               </Button>
@@ -130,20 +99,8 @@ const DataTable = ({ userId }) => {
     getCoreRowModel: getCoreRowModel(),
   });
   useEffect(() => {
-    const getRobots = async () => {
-      await fetchRobots();
-    };
-
     getRobots();
   }, []);
-  useEffect(() => {
-    socket.on("bot", handleBotEvent);
-
-    return () => {
-      // Clean up the socket event listener when the component unmounts
-      socket.off("bot", handleBotEvent);
-    };
-  }, [socket]);
   return (
     <div className="rounded-md border m-5">
       <Table>

@@ -48,6 +48,7 @@ const PendingOrderList = ({ userId }) => {
           {pendingOrders && pendingOrders.length ? (
             pendingOrders.map((pendingOrder) => (
               <PendingOrder
+                key={pendingOrder._id}
                 pendingOrder={pendingOrder}
                 deletePendingOrder={deletePendingOrder}
               />

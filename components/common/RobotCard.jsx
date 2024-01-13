@@ -3,92 +3,26 @@ import { Button } from "../ui/button";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import CircleLoader from "react-spinners/CircleLoader";
 import { Badge } from "@/components/ui/badge";
-import { FaCirclePlay, FaCircleStop, FaPlay, FaStop } from "react-icons/fa6";
-import { cn, socket } from "@/lib/utils";
+import { FaCirclePlay, FaCircleStop } from "react-icons/fa6";
+import { cn } from "@/lib/utils";
 import moment from "moment";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { node_socket } from "@/lib/node_socket";
 
-const RobotCard = ({ connection, fetchConnections }) => {
-  const [robotConnection, setRobotConnection] = useState(connection);
-  const [profit, setProfit] = useState(0);
-  useEffect(() => {
-    // Listen for the "connect" event, which is emitted when the connection is established
-    const onConnect = () => {
-      console.log("Connected to socket");
-    };
-
-    // Listen for the "disconnect" event, emitted when the connection is lost
-    const onDisconnect = () => {
-      console.log("Socket Disconnected");
-    };
-
-    // Add event listeners
-    socket.on("bot", ({ action, data }) => {
-      switch (action) {
-        case "balance":
-          console.log("Balance : ", data);
-          if (robotConnection.account.account_name === data.loginid) {
-            setRobotConnection({
-              ...robotConnection,
-              account: { ...robotConnection.account, balance: data.balance },
-            });
-          }
-          break;
-        case "target_reached":
-          console.log("Target Reached : ", data);
-          if (robotConnection._id === data._id) {
-            setRobotConnection({
-              ...robotConnection,
-              target_reached: true,
-            });
-            fetchConnections();
-          }
-          break;
-        case "trade_success":
-          if (robotConnection._id === data._id) {
-            fetchConnections();
-          }
-          break;
-        case "closed_trade":
-          if (robotConnection._id === data._id) {
-            setProfit(null);
-            fetchConnections();
-          }
-          break;
-        case "current_profit":
-          if (robotConnection._id === data._id) {
-            setProfit(data.current_profit);
-          }
-          break;
-        case "signal":
-          console.log("Signal : ", data);
-          break;
-        default:
-          console.log(action, " : ", data);
-      }
+const RobotCard = ({ connection }) => {
+  const robotConnection = connection;
+  const trade = () => {
+    node_socket.emit("signal", {
+      symbol: "Volatility 10 Index",
+      trade_option: "buy",
+      msg_type: "signal",
     });
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    // Clean up the event listeners when the component unmounts
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.off(["bot"]);
-    };
-  }, [
-    socket,
-    //  robotConnection
-  ]);
-
+  };
   return (
     <div className="flex justify-center m-3">
       <div className="block rounded-lg shadow-lg bg-white max-w-sm text-center">
         <div className=" flex py-3 px-4 border-b border-gray-300 justify-between text-justify">
-          {console.log("Profit : ", profit)}
           <span className="font-semibold">
             {robotConnection.account.account_name}
           </span>
@@ -97,26 +31,31 @@ const RobotCard = ({ connection, fetchConnections }) => {
           </Badge>
         </div>
         <div className="flex justify-center items-center m-3">
-          {robotConnection.open_trade && (profit || profit === 0) && (
-            <span className="flex gap-10">
-              <PacmanLoader
-                color="#364ad6"
-                cssOverride={{}}
-                loading
-                size={10}
-                speedMultiplier={2}
-              />
-              <h5
-                className={cn(profit < 0 ? `text-red-500` : `text-green-500`)}
-              >
-                {profit}
-                {robotConnection.robot.name === "Manu-bot"
-                  ? robotConnection.currency
-                  : "%"}
-              </h5>
-            </span>
-          )}
-          {robotConnection.active && !profit && (
+          {robotConnection.open_trade &&
+            (robotConnection.profit || robotConnection.profit === 0) && (
+              <span className="flex gap-10">
+                <PacmanLoader
+                  color="#364ad6"
+                  cssOverride={{}}
+                  loading
+                  size={10}
+                  speedMultiplier={2}
+                />
+                <h5
+                  className={cn(
+                    robotConnection.profit < 0
+                      ? `text-red-500`
+                      : `text-green-500`
+                  )}
+                >
+                  {robotConnection.profit}
+                  {robotConnection.robot.name === "Manu-bot"
+                    ? robotConnection.currency
+                    : "%"}
+                </h5>
+              </span>
+            )}
+          {robotConnection.active && !robotConnection.profit && (
             <CircleLoader color="#36d7b7" />
           )}
           {!robotConnection.active && (
@@ -162,6 +101,7 @@ const RobotCard = ({ connection, fetchConnections }) => {
               </Button>
             </Link>
           )}
+          <Button onClick={trade}>Trade</Button>
         </div>
         <div className="py-3 px-6 border-t border-gray-300 text-gray-600">
           {moment(robotConnection.updatedAt).fromNow()}

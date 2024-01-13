@@ -1,9 +1,9 @@
 "use client";
-import { getConnectionsByUser } from "@/lib/actions/connection.actions";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import RobotCard from "./RobotCard";
 import { Skeleton } from "../ui/skeleton";
+import { useConnectionStore } from "@/store/Connections";
 
 const skeleton = () => {
   return (
@@ -16,25 +16,10 @@ const skeleton = () => {
 };
 
 const ConnectionGroup = ({ userId }) => {
-  const [robotConnections, setRobotConnections] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const fetchConnections = async () => {
-    try {
-      setIsLoading(true);
-      const connectionsList = await getConnectionsByUser({
-        userId,
-        page: 1,
-        limit: 6,
-      });
-      connectionsList && setRobotConnections(connectionsList.data);
-    } catch (error) {
-      console.log("ConnectionGroup error: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { robotConnections, isLoading, error, getConnections } =
+    useConnectionStore();
   useEffect(() => {
-    fetchConnections();
+    getConnections(userId);
   }, []);
 
   return (
@@ -51,7 +36,7 @@ const ConnectionGroup = ({ userId }) => {
             robotConnections.map((robotConnection) => (
               <RobotCard
                 connection={robotConnection}
-                fetchConnections={fetchConnections}
+                fetchConnections={() => getConnections()}
                 key={robotConnection._id}
               />
             ))

@@ -10,6 +10,7 @@ import {
   FaBaseballBatBall,
   FaCircleQuestion,
   FaGear,
+  FaBullhorn,
 } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";
 
@@ -19,6 +20,11 @@ export const Sidebar = () => {
       href: "/dashboard",
       name: "Dashboard",
       icon: <FaChessQueen className="text-primary" />,
+    },
+    {
+      href: "/signals",
+      name: "Signals",
+      icon: <FaBullhorn className="text-primary" />,
     },
     {
       href: "/robots",

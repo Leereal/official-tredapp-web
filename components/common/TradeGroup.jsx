@@ -6,6 +6,7 @@ import { getAllRobots } from "@/lib/actions/robot.actions";
 import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { useTradeStore } from "@/store/Trade";
 
 const skeleton = () => {
   return (
@@ -19,33 +20,26 @@ const skeleton = () => {
   );
 };
 const TradeGroup = () => {
-  const [deriv, setDeriv] = useState(false);
-  const [symbols, setSymbols] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [deriv, setDeriv] = useState(false);
+  // const [symbols, setSymbols] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  const { deriv, symbols, getSymbols, setDeriv, isLoading, error } =
+    useTradeStore();
 
-  const fetchSymbols = async () => {
-    // We get the robot then extract the symbols in those robots
-    const robotList = await getAllRobots({
-      query: "",
-      category: "Semi-Auto",
-      page: 1,
-      limit: 100,
-    });
-    robotList && setSymbols(robotList.data[0].symbols);
-  };
+  // const fetchSymbols = async () => {
+  //   // We get the robot then extract the symbols in those robots
+  //   const robotList = await getAllRobots({
+  //     query: "",
+  //     category: "Semi-Auto",
+  //     page: 1,
+  //     limit: 100,
+  //   });
+  //   robotList && setSymbols(robotList.data[0].symbols);
+  // };
 
   useEffect(() => {
-    if (!deriv) {
-      setIsLoading(true);
-      try {
-        fetchSymbols();
-      } catch (error) {
-        console.log("Error: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  }, [deriv]);
+    getSymbols();
+  }, []);
 
   return (
     <div className="space-y-3">
@@ -53,7 +47,7 @@ const TradeGroup = () => {
         <Switch
           id="deriv"
           onCheckedChange={() => {
-            setDeriv(!deriv);
+            setDeriv(deriv);
           }}
         />
         <Label htmlFor="deriv">Deriv</Label>
@@ -70,11 +64,7 @@ const TradeGroup = () => {
             symbols
               .filter((symbol) => symbol.active === true)
               ?.map((symbol) => (
-                <TradeCard
-                  currency={symbol.name}
-                  fetchSymbols={fetchSymbols}
-                  key={symbol.name}
-                />
+                <TradeCard currency={symbol.name} key={symbol.name} />
               ))
           ) : (
             <div className="font-bold text-red-600">
