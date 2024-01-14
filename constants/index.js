@@ -67,6 +67,8 @@ export const signalDefaultValues = {
   is_premium: false,
   is_active: true,
   profit: 0,
+  type: "",
+  expiration: 0,
 };
 
 export const symbols = {

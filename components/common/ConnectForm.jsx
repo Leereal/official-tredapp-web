@@ -112,7 +112,7 @@ const ConnectForm = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="xs">
+        <Button>
           {type === "Create" ? (
             <>
               <FaPlus className="mr-2" />

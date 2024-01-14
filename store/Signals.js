@@ -7,13 +7,14 @@ export const useSignalStore = create((set) => ({
   signals: [],
   isLoading: false,
   error: null,
-  getSignals: async () => {
+  getSignals: async (category) => {
     try {
       set({ isLoading: true });
       const response = await getAllSignals({
         query: "",
         page: 1,
         limit: 100,
+        signalCategory: category,
       });
       set({ signals: response.data, error: null });
     } catch (error) {

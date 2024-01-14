@@ -30,8 +30,17 @@ import { useForm } from "react-hook-form";
 import { signalFormSchema } from "@/lib/validator";
 import { Button } from "../ui/button";
 import { FaPencil, FaPlus } from "react-icons/fa6";
+import EntryTypeDropdown from "./EntryTypeDropdown";
+import { cn } from "@/lib/utils";
 
-const SignalForm = ({ userId, type, signal, signalId }) => {
+const SignalForm = ({
+  userId,
+  type,
+  signal,
+  signalId,
+  binary = false,
+  buttonName = "",
+}) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { getSignals } = useSignalStore();
@@ -102,11 +111,11 @@ const SignalForm = ({ userId, type, signal, signalId }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="xs">
+        <Button>
           {type === "Create" ? (
             <>
               <FaPlus className="mr-2" />
-              Post Signal
+              {buttonName}
             </>
           ) : (
             <FaPencil />
@@ -125,7 +134,7 @@ const SignalForm = ({ userId, type, signal, signalId }) => {
             <div className="flex flex-col gap-5 md:flex-row">
               <FormField
                 control={form.control}
-                name="categoryId"
+                name="signalCategoryId"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Category</FormLabel>
@@ -147,7 +156,7 @@ const SignalForm = ({ userId, type, signal, signalId }) => {
                     <FormLabel>Symbol</FormLabel>
                     <FormControl>
                       <SymbolComboBox
-                        categoryId={form.getValues("categoryId")}
+                        categoryId={form.getValues("signalCategoryId")}
                         onChangeHandler={field.onChange}
                         value={field.value}
                       />
@@ -173,8 +182,29 @@ const SignalForm = ({ userId, type, signal, signalId }) => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Entry Type</FormLabel>
+                    <FormControl>
+                      <EntryTypeDropdown
+                        onChangeHandler={field.onChange}
+                        value={field.value}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <div className="flex flex-col gap-5 md:flex-row">
+            <div
+              className={cn(
+                `flex flex-col gap-5 md:flex-row `,
+                binary ? "hidden" : ""
+              )}
+            >
               <FormField
                 control={form.control}
                 name="take_profit_1"
@@ -262,23 +292,44 @@ const SignalForm = ({ userId, type, signal, signalId }) => {
               />
             </div>
             <div className="flex flex-col gap-5 md:flex-row">
-              <FormField
-                control={form.control}
-                name="stop_loss"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Stop Loss</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Stop Loss"
-                        {...field}
-                        className="input-field"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!binary ? (
+                <FormField
+                  control={form.control}
+                  name="stop_loss"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Stop Loss</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Stop Loss"
+                          {...field}
+                          className="input-field"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="expiration"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Expiration (in minutes)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Expiration"
+                          {...field}
+                          className="input-field"
+                          type="number"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="is_active"

@@ -80,7 +80,6 @@ const DataTable = ({ userId }) => {
             </span>
             <span>
               <Button
-                size="xs"
                 className={active ? `bg-red-500` : ``}
                 onClick={() => handleBot(id, row.original)}
                 disabled={isPending && botId === id}
