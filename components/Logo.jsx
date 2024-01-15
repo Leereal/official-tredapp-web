@@ -10,20 +10,12 @@ export const Logo = () => {
     <Link href="/">
       <div className="hover:opacity-75 transition items-center justify-center gap-x-2 hidden md:flex">
         <Image
-          src="/images/logo.png"
+          src="/images/tredapp_logo.png"
           alt="logo"
           sizes=""
-          height={30}
-          width={30}
+          height={400}
+          width={124}
         />
-        <span
-          className={cn(
-            "text-lg md:text-3xl text-primary pb-1",
-            headingFont.className
-          )}
-        >
-          Tred<span className="text-[#00BF63]">app</span>
-        </span>
       </div>
     </Link>
   );

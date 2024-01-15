@@ -5,7 +5,10 @@ import { FaAngleRight } from "react-icons/fa6";
 const Hero = () => {
   return (
     <section>
-      <div className="max-w-screen-xl mx-auto px-4 py-28 gap-12 text-gray-600 overflow-hidden md:px-8 md:flex">
+      <div
+        id="home"
+        className="max-w-screen-xl mx-auto px-4 py-28 gap-12 text-gray-600 overflow-hidden md:px-8 md:flex"
+      >
         <div className="flex-none space-y-5 max-w-xl">
           <Link
             href="/"
@@ -20,11 +23,12 @@ const Hero = () => {
             </p>
           </Link>
           <h1 className="text-4xl text-gray-800 font-extrabold sm:text-5xl">
-            Build your SaaS exactly how you want
+            Empower Your Portfolio: Design Your Trading Journey with Precision
           </h1>
           <p>
-            Sed ut perspiciatis unde omnis iste natus voluptatem accusantium
-            doloremque laudantium, totam rem aperiam, eaque ipsa quae.
+            Revolutionize your trades! Precision-crafted signals tailored for
+            optimal gains. Empower your portfolio with our custom trading
+            solutions. Your success, our mission.
           </p>
           <div className="flex items-center gap-x-3 sm:text-sm">
             <Link

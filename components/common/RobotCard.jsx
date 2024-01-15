@@ -101,7 +101,6 @@ const RobotCard = ({ connection }) => {
               </Button>
             </Link>
           )}
-          <Button onClick={trade}>Trade</Button>
         </div>
         <div className="py-3 px-6 border-t border-gray-300 text-gray-600">
           {moment(robotConnection.updatedAt).fromNow()}

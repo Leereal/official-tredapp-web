@@ -74,9 +74,9 @@ export default () => {
             {headerLinks.map((item, idx) => {
               return (
                 <li key={idx} className="text-gray-700 hover:text-gray-900">
-                  <Link href={item.path} className="block">
+                  <a href={item.path} className="block">
                     {item.title}
-                  </Link>
+                  </a>
                 </li>
               );
             })}

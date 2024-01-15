@@ -28,8 +28,8 @@ const Footer = () => {
         <div className="space-y-6 sm:max-w-md sm:mx-auto sm:text-center justify-center">
           <Logo />
           <p>
-            Nulla auctor metus vitae lectus iaculis, vel euismod massa
-            efficitur.
+            Customize Your Success: Unleash the Power of Tailored Trading
+            Solutions
           </p>
           <div className="items-center gap-x-3 space-y-3 sm:flex sm:justify-center sm:space-y-0">
             <Link

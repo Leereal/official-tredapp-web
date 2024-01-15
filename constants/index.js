@@ -1,8 +1,7 @@
 export const headerLinks = [
-  { title: "Features", path: "/" },
-  { title: "Integrations", path: "/" },
-  { title: "Customers", path: "/" },
-  { title: "Pricing", path: "/" },
+  { title: "Home", path: "#home" },
+  { title: "Testimonials", path: "#testimonials" },
+  { title: "Contact", path: "#contact-us" },
 ];
 export const robotDefaultValues = {
   name: "",

@@ -2,38 +2,39 @@ const Testimonial = () => {
   const testimonials = [
     {
       avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg",
-      name: "Martin escobar",
-      title: "Founder of meta",
+      name: "John D.",
+      title: "Experienced Trader",
       quote:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et est hendrerit, porta nunc vitae.",
+        "Joining this platform revolutionized my trading journey. The signals are spot-on, and the educational resources elevated my skills. Grateful for consistent gains and expert guidance.",
     },
     {
       avatar: "https://randomuser.me/api/portraits/men/46.jpg",
-      name: "Simon andrew",
-      title: "Software engineer",
+      name: "Jethro T G",
+      title: "Novice Investor",
       quote:
-        "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
+        "As a beginner, I found incredible support here. The free signals gave me a solid start, and the learning materials are invaluable. This community makes trading accessible and rewarding.",
     },
     {
       avatar: "https://randomuser.me/api/portraits/men/86.jpg",
-      name: "Micheal worin",
-      title: "Product designer",
+      name: "Alex M",
+      title: "Options Enthusiast",
       quote:
-        "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain.",
+        "Exceptional options signals! The strategies shared are game-changers. The community discussions provide valuable insights. Proud to be a part of this dynamic platform. Highly recommended!",
     },
   ];
 
   return (
-    <section className="relative py-14">
+    <section className="relative py-14" id="testimonials">
       <div className="relative z-10 max-w-screen-xl mx-auto px-4 md:px-8">
         <div className="max-w-xl sm:text-center md:mx-auto">
           <h3 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-            Hear from our customers
+            Glimpses of Success: Testimonials from Our Trading Family
           </h3>
           <p className="mt-3 text-gray-600">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et est
-            hendrerit, porta nunc vitae, gravida justo. Nunc fermentum magna
-            lorem, euismod volutpat arcu volutpat et.
+            Immerse in the authenticity of trader testimonials. Unveil real
+            success stories and firsthand experiences within our community. Our
+            network thrives on shared triumphs, empowering every trader's
+            journey.
           </p>
         </div>
         <div className="mt-12">

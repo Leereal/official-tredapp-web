@@ -128,6 +128,7 @@ export default function LoginForm() {
           href="/sign-up"
           className="font-medium text-blue-600 hover:underline"
         >
+          {" "}
           Sign up
         </Link>
       </p>

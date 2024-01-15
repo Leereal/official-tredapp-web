@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import ConnectionGroup from "@/components/common/ConnectionGroup";
 import { auth } from "@clerk/nextjs";
 import PendingOrderList from "@/components/common/PendingOrderList";
+import { getDashboardData } from "@/lib/actions/dashboard.actions";
 
 const Dashboard = async () => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId;
+  const dashData = await getDashboardData();
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -58,9 +60,7 @@ const Dashboard = async () => {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Subscriptions
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Members</CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -77,7 +77,9 @@ const Dashboard = async () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+2350</div>
+                <div className="text-2xl font-bold">
+                  +{dashData && dashData.members}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   +180.1% from last month
                 </p>
